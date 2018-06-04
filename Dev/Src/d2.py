@@ -18,3 +18,16 @@ for x in range(1,101):
         print('buzz')
     else:
         print(x)
+
+list = []
+
+
+while True:
+    a = input()
+    if a == 'exit':
+        break
+    else:
+        list.append(a)
+list.sort()
+print(list)
+
