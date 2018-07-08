@@ -1,6 +1,12 @@
 # Shell Basic
 
-## if 分支语句的实现 续
+## foreword
+
+接着前面的 shell 的笔记
+
+## 正文
+
+### if 分支语句的实现 续
 
 使用 if 语句实现的分支语句，自己试了试发现孩还是有了不少的理解了
 
@@ -36,6 +42,83 @@
 
     关于 [ 的用法还是相当多的了，自己man吧
 
-## for 的循环实现
+### for 的循环实现
 
-test
+**循环格式**
+
+这里的是一般形式
+
+    for var in item1 item2 ... itemN
+    do
+        command1
+        command2
+        ...
+        commandN
+    done
+
+这里是在终端的单行形式
+
+    for var in item1 item2 ... itemN; do command1; command2… done;
+
+---
+
+后面 前面变量 对后面 的item 进行迭代。eg:
+
+    for var in 1 2 3 4 5 
+    do
+        echo "num is $var"
+    done
+
+写作单行
+
+    for var in 1 2 3 4 5; do echo "num : $var" ; done
+
+- 记住 分号不意味着语句结束，而是格式缩进
+- item 可以是返回内容，这样自动转换为 对单个词汇(空格隔开)进行的迭代；
+
+    例如
+    
+        for var in $(ps -ef); do echo "ps:$var"; done
+    
+    当然这里应该使用 awk 或者 xarg ，这个神奇，后面了解
+
+- in列表可以包含替换、字符串和文件名。
+
+### while 循环实现
+
+**基本格式**
+
+    while condition
+    do
+        command
+    done
+
+可见 while 使用在 条件循环的实现。 for 实现的是列表的迭代。
+
+---
+
+
+迭代条件是判断 condition 是真的时候 eg：
+
+    int=10
+    while(( $int > 0))
+    do
+        echo $int
+        let "int--"
+    done
+
+这里是实现了对于 int 的自减，且连续输出。
+
+- [let 的用法](http://www.runoob.com/linux/linux-comm-let.html) 用于执行一个或者多个表达式。
+
+    let "int --"    在使用过程中是不需要 $ 进行变量引用。 有空格需要引号
+
+    具体什么意思呢？ 举个例子
+
+        > a=5+4
+        > echo $a
+        5+4
+        > let a=5+4
+        echo $a
+        9
+    发现了，在相识赋值语句这样的语句，只是进行赋值，对表达式本身是不进行计算的。        
