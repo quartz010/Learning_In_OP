@@ -7,10 +7,10 @@
 ## Context
 
 **行读取源文件**
-
-# cat ${CONF} | grep -v "^#" | while read line
-# 循环读取不匹配行
-# ^# 表示 # 注释行
+	
+	# cat ${CONF} | grep -v "^#" | while read line
+	# 循环读取不匹配行
+	# ^# 表示 # 注释行
 
 按行读取一个 log 文件，使用正则表达式，可以忽略注释行
 
