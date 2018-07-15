@@ -131,6 +131,6 @@
 
     再例如
 
-        SELECT PASSWD, UNAME 
-        FROM ADMIN 
+        SELECT PASSWD, UNAME
+        FROM ADMIN
         WHERE UNAME = 'ROOT'
