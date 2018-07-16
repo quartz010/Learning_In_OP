@@ -134,3 +134,47 @@
         SELECT PASSWD, UNAME
         FROM ADMIN
         WHERE UNAME = 'ROOT'
+
+### 常用实例
+
+- 列出所有 数据库
+
+        SHOW DATABASES
+
+- 列出所有 表
+
+        SHOW TABELS
+
+- 列出 表结构
+
+        DESC table_name
+
+- 列出 指定数据库 全部表 字段 字段类型
+
+        select table_name from information_schema.tables where table_schema='database_name' and table_type='base table';
+
+    这个 information_schema(模式) 就是用于保存 数据库的结构的 一个专用数据库
+
+    这里的这条语句 查询 列名，字段类型
+
+        select column_name,data_type from information_schema.columns where table_schema='database_name' and table_name='table_name';
+
+- 列出时间段的 数据，前提是 在字段名中是存在 时间戳的
+
+        SELECT * FROM table_name WHERE table_name.stattime > DATE_SUB( curdate( ), INTERVAL 1 DAY ) AND table_name.stattime <  date_sub(curdate( ), interval -17 hour);
+
+    这个查询语句 就比较长， 一点点的 看，选择所有字段，其中时间戳需要满足条件
+
+        DATE_SUB( curdate( ), INTERVAL 1 DAY )  // 当前时间 减去一天
+        date_ADD( curdate( ), interval 17 hour);// 当前天加上 17小时
+        table_name.stattime < now() // 优雅的版本
+
+    可以变得更优雅， 学习是渐进的
+
+        SELECT * FROM tbn WHERE tbn.stattime > DATE_SUB( now(), INTERVAL 1 hour ) AND tbn.stattime <  now();
+
+    更更优雅， 列出一个小时的数据
+
+        SELECT * FROM tbn WHERE tbn.stattime BETWEEN DATE_SUB( now(), INTERVAL 1 hour ) AND now();
+
+    (实力菜鸡，巩固基础)
