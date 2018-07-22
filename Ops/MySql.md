@@ -4,7 +4,7 @@
 
 用到啥学啥了，东西太多太乱
 
-## 正文
+## 基础
 
 ### SQL 的名词
 
@@ -178,3 +178,77 @@
         SELECT * FROM tbn WHERE tbn.stattime BETWEEN DATE_SUB( now(), INTERVAL 1 hour ) AND now();
 
     (实力菜鸡，巩固基础)
+
+### 表的索引结构
+
+下面语句可以显示一个表的索引结构
+
+    SHOW INDEX FROM [table_name];
+    show keys from [table_name];
+
+## 进阶用法
+
+这里整合一下关于SQL的高端的操作。当然，直戳是目前自己能看懂的进阶篇
+
+### sql的变量
+
+- 变量赋值
+	
+	sql 中的变量是以 @开头 的碎一个变量的赋值，语法如下：
+	
+		> set @var="var"
+		> select @var 
+		
+		@var
+		var
+
+- 变量长度
+	
+	在 SQL 中的变量长度是有最大限度的。当一变量超出了系统默认的长度，会发生截断的。具体的变量是存在于 `group_concat`
+	
+		set group_concat = 4096 # 其默认的大小是 1024
+
+
+### 语句模式
+	
+这里自己对sql的语句的模式进行一点小小的分析，以便学习，一个查询语句，一般是三个部分
+	
+- SELECT	后面的部分是对输出的操作
+- FROM		后面的部分是对输入的操作
+- WHERE		这里是条件操作
+
+ 所以一般的查询语句是分着三个部分的。
+
+这里选取一条语句来看：
+
+	set @op=(select GROUP_CONCAT(distinct(op) SEPARATOR ',') from oplist where instr(concat(',',@myops,','),concat(',',ops,',')) > 0);
+
+
+看似，是比较复杂的，这里把他一样的 通过上面的模式分成三部分。不过前面多了个 set。在这里就是一个赋值语句了
+ 
+所以根据前面的 模式，这里是输出部分的操作， `GROUP_CONCAT(distinct(op) SEPARATOR ',')` 就是这一句
+
+其实， 这里根据 sql 的吗，manual 可以得到其函数说明， 前面的是Group 组连接，把输出的一个 组(字段和数据)
+给连接成了一个数据，并且是用 SEPARATOR（分隔器） 对其进行分隔。distinct 顾名思义，只显示差距数据，也就是
+忽略了重复数据
+
+再到后面的输入部分，这里就是单单的一个表了。
+
+再往后的就是条件部分，用来筛选这个 记录的条件。instr() 这个可以看出，是一个判断是包含字符串的东西了，
+
+
+> Concatenate several expressions together:
+
+	SELECT CONCAT(Address, " ", PostalCode, " ", City) AS Address FROM Customers;
+
+这里可以看见， 这个函数是用来可以连接多个表达式的东西。
+
+所以，后面的条件语句，就是 在 OPS 这个列名里面，找到在 @myops 的子串， 得到如果这个返回值大于 0 了，
+即代表着存在。这样就得到我们符合条件的 记录。
+
+当然，我们可可以这样的得到一个查询表单的输出，而不是，一个连接的字符串变量
+
+	select distinct(op) from oplist where instr(concat(',',@myops,','),concat(',',ops,',')) > 0
+
+这样的就不是输出一个变量了，而是一个查询集合。
+
