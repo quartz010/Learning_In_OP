@@ -23,3 +23,5 @@
   - [**THE Django Book**](http://djangobook.py3k.cn/)
 - Programma Language
   - [Python](http://www.runoob.com/python/python-mysql.html)
+
+[x](https://sre.ink/wlms-shutdown/#comment-2529)
